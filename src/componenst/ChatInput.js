@@ -1,11 +1,11 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { Button } from '@material-ui/core';
 import styled from 'styled-components';
 import { db } from '../firebase';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 
-const ChatInput = ({ channelName, channelId }) => {
+const ChatInput = ({ channelName, channelId, chatRef }) => {
   const [input, setInput] = useState('');
 
   const sendMessage = (e) => {
@@ -13,12 +13,17 @@ const ChatInput = ({ channelName, channelId }) => {
     if (!channelId) {
       return false;
     }
-    db.collection('rooms').doc(channelId).collection('message').add({
+    db.collection('rooms').doc(channelId).collection('messages').add({
       message: input,
       timestamp: firebase.firestore.FieldValue.serverTimestamp(),
       user: 'Tofik Hasanov',
-      userImage: 'https://picsum.photos/200/300',
+      userImage: 'https://i.ibb.co/ZmDW1WG/All-random.jpg',
     });
+
+    chatRef.current.scrollIntoView({
+      behavior: 'smooth',
+    });
+
     setInput('');
   };
 
